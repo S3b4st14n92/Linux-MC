@@ -1,0 +1,64 @@
+#!/bin/bash 
+
+path="/home/kali/Documents/"
+pathgit="/home/kali/Documents/git"
+
+###	Install Kali from ISO Image in a new vm. ("Ready to use vm" gave me too many problems setting up the keyboard)
+echo "Install File"
+
+###	Update the system & install 
+sudo apt update -y
+###sudo apt -y full-upgrade
+###	Reboot now in case you have updated to a new kernel. 
+###reboot
+
+
+
+### 	Install packets
+sudo apt install git
+###sudo apt -y --reinstall install open-vm-tools-desktop fuse
+### 	Install software
+
+# List of programs to check
+programs=(python3 )
+
+# Check if each program is installed
+for program in "${programs[@]}"; do
+  if ! command -v "$program" > /dev/null; then
+    # Program is not installed, so install it
+    # Replace "apt-get install" with the appropriate package manager for your system
+    sudo apt-get install "$program"
+  else
+    # Program is installed, so update it
+    # Replace "apt-get update" with the appropriate package manager for your system
+    sudo apt-get update "$program"
+  fi
+done
+
+# Set Python 3 as the default Python interpreter
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+
+# Check the default Python version
+python --version
+
+###Then create folder /git
+cd "$path"
+sudo mkdir git
+
+###	8. Interesting github repositories to clone:
+cd "$git"
+sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
+
+
+
+
+###	Update .zshrc
+alias ll='ls -la'
+
+
+	
+	
+# Display the version of each program (/todo Seb funktionert nicht immer) 
+for program in "${programs[@]}"; do
+  echo "$program: $(command -v "$program" --version 2>/dev/null)"
+done
