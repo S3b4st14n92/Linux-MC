@@ -3,7 +3,7 @@
 path="/home/kali/Documents/"
 pathgit="/home/kali/Documents/git"
 
-###	Install Kali from ISO Image in a new vm. ("Ready to use vm" gave me too many problems setting up the keyboard)
+
 echo "Install File"
 
 ###	Update the system & install 
