@@ -13,6 +13,9 @@ sudo apt update -y
 ###reboot
 
 
+###	Update .zshrc
+alias ll='ls -la'
+
 
 ### 	Install packets
 sudo apt install git
@@ -20,8 +23,52 @@ sudo apt install git
 ### 	Install software
 
 # List of programs to check
-programs=(python3 )
+# Python3:
+# Python3 ist eine interpretierte Programmiersprache, die für viele verschiedene Anwendungen verwendet werden kann, einschließlich Webentwicklung, Datenanalyse und Automatisierung.
 
+# cmake:
+# CMake ist ein plattformübergreifendes Build-System, das es Entwicklern ermöglicht, ihre Projekte auf verschiedenen Plattformen und mit verschiedenen Compilern zu bauen.
+
+# gcc:
+# GCC steht für GNU Compiler Collection und ist eine Sammlung von Compilern für viele verschiedene Programmiersprachen, darunter C, C++, Fortran und Ada.
+
+# esptool:
+# Esptool ist ein Kommandozeilen-Tool zum Flashen und Debuggen von Microcontrollern, insbesondere für ESP8266 und ESP32.
+
+# python3-pip:
+# PIP ist das Paketverwaltungssystem für Python. Mit PIP kann man Python-Module und -Bibliotheken herunterladen und installieren.
+
+# wget:
+# Wget ist ein Kommandozeilen-Programm zum Herunterladen von Dateien aus dem Internet.
+
+# fritzing:
+# Fritzing ist eine Open-Source-Software zur Erstellung von Schaltplänen, Breadboard-Layouts und PCB-Designs für Elektronikprojekte.
+
+# flex:
+# Flex ist ein generischer Scanner-Generator, der aus einer Definition einer regulären Sprache einen Scanner erzeugt, der in ein Programm integriert werden kann.
+
+# bison:
+# Bison ist ein Parser-Generator, der aus einer Grammatik einen Parser erzeugt, der eine Eingabe anhand der Grammatik analysieren kann.
+
+# gperf:
+# Gperf ist ein Werkzeug zur Generierung von perfekten Hash-Tabellen aus einer Eingabe mit Schlüssel-Wert-Paaren.
+
+# python-setuptools:
+# Setuptools ist ein Paket für Python, das es erleichtert, Python-Module und -Bibliotheken als Pakete zu veröffentlichen und zu installieren.
+
+# ninja-build:
+# Ninja ist ein schnelles und kompaktes Build-System, das für kontinuierliche Integrationsumgebungen und andere Zwecke entwickelt wurde.
+
+# ccache:
+# CCache ist ein Werkzeug zur Beschleunigung des Kompilierprozesses, indem es bereits kompilierte Quellcode-Teile
+
+#Putty
+#Putty ist ein freies Telnet- und SSH-Client für Windows und Unix-Systeme. Mit Putty kann man eine sichere Verbindung zu einem Remote-Computer herstellen und auf diesen als ob man direkt davor sitzen würde zugreifen
+
+
+
+programs=(python3 cmake gcc esptool python3-pip wget fritzing flex bison gperf python-setuptools ninja-build ccache libffi-dev libssl-dev dfu-util putty) 
+pipinstall=(mpfshell )
 # Check if each program is installed
 for program in "${programs[@]}"; do
   if ! command -v "$program" > /dev/null; then
@@ -37,9 +84,11 @@ done
 
 # Set Python 3 as the default Python interpreter
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+# Mc Python
+sudo pip install mpfshell
+sudo pip install esptool
 
-# Check the default Python version
-python --version
+
 
 ###Then create folder /git
 cd "$path"
@@ -47,18 +96,42 @@ sudo mkdir git
 
 ###	8. Interesting github repositories to clone:
 cd "$git"
-sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
+sudo git clone --recursive https://github.com/espressif/esp-idf.git
 
 
 
 
-###	Update .zshrc
-alias ll='ls -la'
+# Set up the environment variables
+echo "export IDF_PATH=~/esp-idf" >> ~/.bashrc
+source ~/.bashrc
+
+# Install the required Python packages
+python -m pip install --upgrade --user pip setuptools wheel
+python -m pip install --user -r $IDF_PATH/requirements.txt
+
+# Install the serial terminal emulator (minicom)
+sudo apt-get install -y minicom
+
+# Install Visual Studio Code
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+sudo apt-get update
+sudo apt-get install -y code
+
+# Install the C/C++ extension for Visual Studio Code
+code --install-extension ms-vscode.cpptools
+
+# Install the PlatformIO IDE extension for Visual Studio Code
+code --install-extension platformio.platformio-ide
+
+# Finish the installation
+echo "Installation complete!"
+
+# Check the default Python version
+python --version
+pip3 --version
+
 
 
 	
 	
-# Display the version of each program (/todo Seb funktionert nicht immer) 
-for program in "${programs[@]}"; do
-  echo "$program: $(command -v "$program" --version 2>/dev/null)"
-done
